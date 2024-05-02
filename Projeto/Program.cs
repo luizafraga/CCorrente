@@ -17,7 +17,7 @@ namespace Projeto
 
             int Menu()
             {
-                
+
                 Console.WriteLine("--- Menu ---");
                 Console.WriteLine("1. Acesso Administrativo");
                 Console.WriteLine("2. Caixa Eletrônico");
@@ -110,7 +110,7 @@ namespace Projeto
             {
                 foreach (var conta in contas) //percorre cada elemento da lista 'contas'
                 {
-                    if(conta.status == false) 
+                    if (conta.status == false)
                         continue; // nao mostra as contas excluidas
                     Console.WriteLine($"Conta: {conta.numero}, Saldo: {conta.saldo}"); // o $ substitui pelos valores reais do num e do saldo da conta
                 }
@@ -124,7 +124,7 @@ namespace Projeto
                 CCorrente conta = contas.FirstOrDefault(c => c.numero == num); // busca na lista 'contas' p encontrar a primeira instância de CCorrente, em q o num da conta seja igual a var num
                 conta.status = false; // 'exlui' a conta
                 Console.WriteLine("---> Conta excluída! \n");
-                
+
             }
 
             static void CaixaEletro()
@@ -151,7 +151,7 @@ namespace Projeto
                     Console.WriteLine("4. Voltar");
 
                     int op;
-                    double saque, depo, valor_trans, saldo=0;
+                    double valor;
                     string? i;
                     i = Console.ReadLine();
                     Int32.TryParse(i, out op);
@@ -161,25 +161,26 @@ namespace Projeto
                         case 1:
                             Console.WriteLine("Digite o valor do saque:");
                             i = Console.ReadLine();
-                            Double.TryParse(i, out saque);
+                            Double.TryParse(i, out valor);
 
-                            if (saque < saldo)
+                            if (conta.Sacar(valor))
                             {
                                 Console.WriteLine("---> Saque realizado!");
-                                saldo -= saque;
                             }
                             else
                                 Console.WriteLine("---> Saldo inválido para esse saque.");
-                            
+
                             break;
-               
+
                         case 2:
                             Console.WriteLine("Digite o valor do depósito:");
                             i = Console.ReadLine();
-                            Double.TryParse(i, out depo);
+                            Double.TryParse(i, out valor);
 
-                            Console.WriteLine("---> Depósito realizado!");
-                            saldo += depo;
+                            if (conta.Depositar(valor))
+                                Console.WriteLine("---> Depósito realizado!");
+                            else
+                                Console.WriteLine("---> Valor de deposito inválido.");
                             break;
 
                         case 3:
@@ -197,8 +198,11 @@ namespace Projeto
 
                             Console.WriteLine("Digite o valor da transferência:");
                             i = Console.ReadLine();
-                            Double.TryParse(i, out valor_trans);
-                            Console.WriteLine("--> Transferência realizada!");
+                            Double.TryParse(i, out valor);
+                            if (conta.Transferir(cc_trans, valor))
+                                Console.WriteLine("--> Transferência realizada!");
+                            else
+                                  Console.WriteLine("---> Valor de deposito inválido.");
                             break;
 
                         case 4:
